@@ -78,4 +78,4 @@ Our assessment of fairness will rely on two groups from the dataset. We will be 
 
 After conducting the test, we determined a p-value of `p = 0.93`, which is not statistically significant at the 5 percent level. We fail to reject our null hypothesis. 
 
-We conclude that our model is likely to be fair and that any differences in RMSEs are due to random chance. In terms of generalizability, our model will likely always be usable on any dataset with the same data-generating process.
+We conclude that our model is likely to be fair and that any differences in RMSEs are due to random chance. In terms of generalizability, our model is likely usable on any dataset with the same data-generating process.
