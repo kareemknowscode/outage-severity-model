@@ -56,6 +56,8 @@ In our final model, we aim to improve upon our baseline by optimizing hyperparam
 
 Previous categorical and numerical features we used in the baseline model were maintained. A new squared `'ANOMALY.LEVEL'` was created to try and capture the variation of Niño anomaly events, and `'PC.REALGSP.STATE'` was turned into quartiles to gauge variation around the median level of real GSP per state. The main reason we selected these features is because we believe that electric company data about how many customers they serve in the residential sector is important in predicting the area-wide severity of outages. The intuition behind specifically focusing on the proportions of residential customers is simple: If most land is occupied by residences, then we can likely accurately predict the proportion of customers affected by an outage event using this data. 
 
+We experimented with various supervised regression algorithms for our final model. One key one we wish to mention, but did not use was a LASSO regression model. We wanted to find the features that had the strongest relationship with our response variable. The large number of features that we had may have been causing noise in our predictions, and we felt that LASSO was most advantageous in dealing with features that might not have any effect on our response variable. We ended up deciding on Random Forest regression since we wanted to minimize features and use engineered features that would help capture hidden relationships in the data, such as squared anomaly level. We also determined an overfit in the RR<sup>2</sup> of the LASSO model, which was not sustainable in practice.
+
 Our final model again uses a Random Forest regression model to make predictions. Along with this, we have implemented Grid Search as our cross-validation algorithm to optimize our hyperparameters, specifically max tree depth = 5, the minimum number of samples before splitting a leaf = 200, and the criterion for which the model evaluates data was selected to be in terms of the Poisson distribution. Given the feature selection and the hyperparameter optimization, these are our model’s evaluation metrics:
 
 |**Training Data**				|**Test Data**|
@@ -65,3 +67,13 @@ Our final model again uses a Random Forest regression model to make predictions.
 The test set accuracy has increased by 4% on average, up to 25%, showing improvement in terms of our model’s prediction power. Not only that but the RMSEs of the training and test set are still relatively close, and this maintains our model’s high generalization power which was achieved in the baseline model. Overall, this is an improvement over our baseline model. We had hoped to predict with much more accuracy, but we believe that the low accuracy can be attributed to a few key facts. For one, this model predicts power outage severity across the ENTIRE country by NERC region and state. Given that each region has its unique power grid, likely with different technical specifications, it is difficult to ascertain the various outside factors that might influence the model’s performance in this case. 
 
 ## Fairness Analysis
+
+Our assessment of fairness will rely on two groups from the dataset. We will be checking whether or not samples of RMSEs from the WECC region (Western Electric Coordinating Council) and the TRE (Texas Reliability Entity) are drawn from the same distribution. In other words, we are checking the West Coast's power grid against Texas's power grid, and using their predicted RMSEs. Specifically, we are using the absolute difference in RMSEs for our test statistic and we will be conducting this test at the 5% level.
+
+**Null Hypothesis/H0**: Our model’s RMSEs for the WECC region and the TRE region are nearly the same, implying fairness in our prediction model.
+
+**Alternative Hypothesis/H1**: Our model’s RMSEs for the WECC region and the TRE region are not the same, implying that our prediction model unfairly predicts across groups.
+
+After conducting the test, we determined a p-value of `p = 0.93`, which is not statistically significant at the 5 percent level. We fail to reject our null hypothesis. 
+
+We conclude that our model is likely to be fair and that any differences in RMSEs are due to random chance. In terms of generalizability, our model will likely always be usable on any dataset with the same data-generating process.
