@@ -38,7 +38,7 @@ Using this data, we separated our model into training and testing sets and ran t
 ### Results
 
 |**Training Data**				|**Test Data**|
-|R<sup>2</sup> = 0.67     |R<sup>2</sup> = 0.21|
+|R<sup>2</sup> = 0.71     |R<sup>2</sup> = 0.21|
 |RMSE = 0.05              |RMSE = 0.04|
 
 Our model achieved a 21% accuracy on average for predictions made from the given test set. This is somewhat weak for our initial model but given that we have not yet optimized our hyperparameters or added more advanced features to our model, we are somewhat satisfied. More importantly, we can see from how close the training and testing RMSEs are that our model generalizes very well and thus shows that our model may not be prone to overfitting.
@@ -50,3 +50,15 @@ In our final model, we aim to improve upon our baseline by optimizing hyperparam
 |`'RES.PRICE'`      |Standardized monthly electricity price for the residential sector in cents/kW-H|
 |`'elnino'`/`'lanina'`              |Binarized columns containing 1 if true for El Niño/La Niña anomaly event(t=±0.05)|
 |`'TOTAL.SALES'` |Quartiles of total electricity consumption in a given U.S. state|
+
+Previous categorical and numerical features we used in the baseline model were maintained. A new squared `'ANOMALY.LEVEL'` was created to try and capture the variation of Niño anomaly events, and `'PC.REALGSP.STATE'` was turned into quartiles to gauge variation around the median level of real GSP per state. The main reason we selected these features is because we believe that electric company data about how many customers they serve in the residential sector is important in predicting the area-wide severity of outages. The intuition behind specifically focusing on the proportions of residential customers is simple: If most land is occupied by residences, then we can likely accurately predict the proportion of customers affected by an outage event using this data. 
+
+Our final model again uses a Random Forest regression model to make predictions. Along with this, we have implemented Grid Search as our cross-validation algorithm to optimize our hyperparameters, specifically max tree depth = 5, the minimum number of samples before splitting a leaf = 200, and the criterion for which the model evaluates data was selected to be in terms of the Poisson distribution. Given the feature selection and the hyperparameter optimization, these are our model’s evaluation metrics:
+
+|**Training Data**				|**Test Data**|
+|R<sup>2</sup> = 0.45     |R<sup>2</sup> = 0.25|
+|RMSE = 0.05              |RMSE = 0.04|
+
+The test set accuracy has increased by 4% on average, up to 25%, showing improvement in terms of our model’s prediction power. Not only that but the RMSEs of the training and test set are still relatively close, and this maintains our model’s high generalization power which was achieved in the baseline model. Overall, this is an improvement over our baseline model. We had hoped to predict with much more accuracy, but we believe that the low accuracy can be attributed to a few key facts. For one, this model predicts power outage severity across the ENTIRE country by NERC region and state. Given that each region has its unique power grid, likely with different technical specifications, it is difficult to ascertain the various outside factors that might influence the model’s performance in this case. 
+
+## Fairness Analysis
