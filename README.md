@@ -64,7 +64,9 @@ Our final model again uses a Random Forest regression model to make predictions.
 |R<sup>2</sup> = 0.45     |R<sup>2</sup> = 0.25|
 |RMSE = 0.05              |RMSE = 0.04|
 
-The test set accuracy has increased by 4% on average, up to 25%, showing improvement in terms of our model’s prediction power. Not only that but the RMSEs of the training and test set are still relatively close, and this maintains our model’s high generalization power which was achieved in the baseline model. Overall, this is an improvement over our baseline model. We had hoped to predict with much more accuracy, but we believe that the low accuracy can be attributed to a few key facts. For one, this model predicts power outage severity across the ENTIRE country by NERC region and state. Given that each region has its unique power grid, likely with different technical specifications, it is difficult to ascertain the various outside factors that might influence the model’s performance in this case. 
+The test set accuracy has increased by 4% on average, up to 25%, showing improvement in terms of our model’s prediction power. Not only that but the RMSEs of the training and test set are still relatively close, and this maintains our model’s high generalization power which was achieved in the baseline model. Overall, this is an improvement over our baseline model. We had hoped to predict with much more accuracy, but we believe that the low accuracy can be attributed to a few key facts. For one, this model predicts power outage severity across the ENTIRE country by NERC region and state. Given that each region has its unique power grid, likely with different technical specifications, it is difficult to ascertain the various outside factors that might influence the model’s performance in this case.
+
+<iframe src="plots/3-way-comp.html" width=600 height=400 frameBorder=0></iframe>
 
 ## Fairness Analysis
 
