@@ -15,19 +15,19 @@ To make our model robust, we only use the features listed above given that the d
 As stated previously, we are using a random forest regression model to make our predictions from the data. At the time from the start of our prediction, we will use a variety of features from the dataset that we believe to be useful in predicting outage severity, listed below:
 
 ### Features
-| **Variables**            | **Description**                                              |
+| **Variables**             | **Description**                                              |
 |---------------------------|--------------------------------------------------------------|
 | `'YEAR'`                  | Year that the outage occurred                                |
 | `'MONTH'`                 | Month that the outage occurred                               |
 | `'U.S._STATE'`            | State that the outage occurred                                |
-| `'NERC.REGION'`           | Categorical data describing the climate at the time of the outage |
+| `'NERC.REGION'`           | Categorical data describing the climate at the time of the outage|
 | `'CLIMATE.REGION'`        | NCE Climate Regions for a given U.S. state                   |
 | `'CLIMATE.CATEGORY'`      | Climate episode for a given U.S. state                        |
 | `'CAUSE.CATEGORY'`        | Categorical data describing the cause of the outage, e.g., “severe weather” |
 | `'CAUSE.CATEGORY.DETAIL'` | Details as to the cause of the outage, e.g., “heavy wind”     |
 | `'PC.REALGSP.STATE'`      | Per capita real GSP of a given state (adj. for inflation, 2009 chained $USD) |
 | `'TOTAL.CUSTOMERS'`       | The annual number of total customers served in a U.S. state   |
-| `'ANOMALY.LEVEL'`         | Oceanic Niño Index. Scores of +0.5 and higher indicate El Niño. Scores of -0.5 and lower indicate La Niña. |
+| `'ANOMALY.LEVEL'`         | Oceanic Niño Index. Scores of +0.5 and higher indicate El Niño. Scores of -0.5 and lower indicate La Niña.|
 
 In total, we have 15 features for our baseline model which will be useful in generating accurate predictions regarding power outage severity. `'U.S._STATE'`, `'NERC.REGION'`, `'CLIMATE.REGION'`, `'CLIMATE.CATEGORY'`,  `'CAUSE.CATEGORY'`, and `'CAUSE.CATEGORY.DETAIL'` are our nominal features, which we will be one hot encoding for our model. `'YEAR'` and `'MONTH'` are technically ordinal features, but to predict severity, we will treat them as nominal rather than ordinal since there is no reasonable trend to follow in terms of going year by year. 
 Our quantitative features include `'PC.REALGSP.STATE'`, `'CUSTOMERS.PROPORTION'`, `'TOTAL.CUSTOMERS'`, `'ANOMALY.LEVEL'`, `'OUTAGE.DURATION'`. We will be standardizing these features to gauge variation among the data and judge just how severe any given outage event is relative to the average severity of outages from our data.
@@ -37,8 +37,8 @@ Using this data, we separated our model into training and testing sets and ran t
 
 ### Results
 
-|*Training Data*				|*Test Data*|
-|R<sup>2</sup> = 0.67   |R<sup>2</sup> = 0.21|
-|RMSE = 0.05            |RMSE = 0.04|
+|**Training Data**				|**Test Data**|
+|R<sup>2</sup> = 0.67     |R<sup>2</sup> = 0.21|
+|RMSE = 0.05              |RMSE = 0.04|
 
 Our model achieved a 21% accuracy on average for predictions made from the given test set. This is somewhat weak for our initial model but given that we have not yet optimized our hyperparameters or added more advanced features to our model, we are somewhat satisfied. More importantly, we can see from how close the training and testing RMSEs are that our model generalizes very well and thus shows that our model may not be prone to overfitting.
