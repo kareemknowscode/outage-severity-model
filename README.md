@@ -10,3 +10,35 @@ Anticipating and mitigating power outages is key to ensuring the stability of pu
 In this model, we use a Random Forest regression model to predict our response variable: the proportion of citizens affected by power outage events. We selected this variable for a few reasons, with the main one being ease of interpretation. We believe that if we can predict the proportion of those affected by outages, we can directly apply this to predicting outage severity given other factors such as the cause of any given outage, climate, region, and the ONI (Oceanic Niño Index). This model uses RMSE and R<sup>2</sup> as the main evaluation metrics to determine accuracy.
 
 To make our model robust, we only use the features listed above given that the data could only be obtained from previous power outage events and are not dependent on outside factors such as actual weather events at the time. 
+
+## Baseline Model
+As stated previously, we are using a random forest regression model to make our predictions from the data. At the time from the start of our prediction, we will use a variety of features from the dataset that we believe to be useful in predicting outage severity, listed below:
+
+### Features
+|*Variables*				|*Description*|
+| --- 						|---|
+|`'YEAR'` 					|Year that the outage occurred|
+|`'MONTH'`					|Month that the outage occurred|
+|`'U.S._STATE'`			|State that the outage occurred|
+|`'NERC.REGION'` 		|Categorical data describing the climate at the time of the outage|
+|`'CLIMATE.REGION'`  	|NCE Climate Regions for a given U.S. state|
+|`'CLIMATE.CATEGORY'`|Climate episode for a given U.S. state|
+|`'CAUSE.CATEGORY'` 		|Categorical data describing the cause of the outage. E.g. “severe weather”|
+|`'CAUSE.CATEGORY.DETAIL'` 	|Details as to the cause of the outage. E.g. “heavy wind”|
+|`'PC.REALGSP.STATE'` 		|Per capita real GSP of a given state (adj. for inflation, 2009 chained $USD)|
+|`'TOTAL.CUSTOMERS'` |The annual number of total customers served in a U.S. state|
+|`'ANOMALY.LEVEL'`   |Oceanic Niño Index. Scores of +0.5 and higher indicate El Niño. Scores of -0.5 and lower indicate La Niña.|
+
+In total, we have 15 features for our baseline model which will be useful in generating accurate predictions regarding power outage severity. `'U.S._STATE'`, `'NERC.REGION'`, `'CLIMATE.REGION'`, `'CLIMATE.CATEGORY'`,  `'CAUSE.CATEGORY'`, and `'CAUSE.CATEGORY.DETAIL'` are our nominal features, which we will be one hot encoding for our model. `'YEAR'` and `'MONTH'` are technically ordinal features, but to predict severity, we will treat them as nominal rather than ordinal since there is no reasonable trend to follow in terms of going year by year. 
+Our quantitative features include `'PC.REALGSP.STATE'`, `'CUSTOMERS.PROPORTION'`, `'TOTAL.CUSTOMERS'`, `'ANOMALY.LEVEL'`, `'OUTAGE.DURATION'`. We will be standardizing these features to gauge variation among the data and judge just how severe any given outage event is relative to the average severity of outages from our data.
+`'CUSTOMERS.PROPORTION'` is not a feature included in the original dataset. We created it by dividing the customers affected by an outage by the total customer count of the US state. This is going to be our response variable, which will greatly help in quantifying the severity of a power outage in terms of how widespread it might be. We expect that larger outages will increase the proportion of customers that experience outages, which we believe justifies our use of this proportion as our response variable. 
+Our data cleaning process was nearly the same as we had performed previously in our analysis of the effects of outages on California’s GSP, except that now we will include all 50 states and the NERC regions that they are associated with. We also include US climate regions as well. In terms of missing data, we mostly dealt with these issues by dropping the rows that did not contain data given that it was not possible to impute that data, such as a missing outage restoration date or a missing cause category. For the rows with missing data we did not up and drop, we were able to determine the correct values that we then imputed. For example, the state of Hawaii did not originally have any values in the `'CLIMATE.REGION'` column, and we imputed its region as the Pacific Islands region. We were able to impute some values in `'CAUSE.CATEGORY.DETAIL'` by duplicating self-explanatory values from the `'CAUSE.CATEGORY'` column such as “islanding”, which describes the exact issue that caused the outage to occur. 
+Using this data, we separated our model into training and testing sets and ran the model. We used an 80-20 split and a max depth of 5 for our random forest regressor and from this, we got the following metrics on average (rounded to the nearest hundredth):
+
+### Results
+
+|*Training Data*				|*Test Data*|
+|R<sup>2</sup> = 0.67   |R<sup>2</sup> = 0.21|
+|RMSE = 0.05            |RMSE = 0.04|
+
+Our model achieved a 21% accuracy on average for predictions made from the given test set. This is somewhat weak for our initial model but given that we have not yet optimized our hyperparameters or added more advanced features to our model, we are somewhat satisfied. More importantly, we can see from how close the training and testing RMSEs are that our model generalizes very well and thus shows that our model may not be prone to overfitting.
