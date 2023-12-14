@@ -1,8 +1,8 @@
-#
+# Predicting the Severity of Power Outages: Predictive Modeling and Analysis
 
 Authors: Mariana Paco, Kareem Mazboudi
 
-This is a data science project that aims to utilize machine learning models for predicting the severity of power outages. Our previous exploratory data analysis on this dataset can be found [here](https://kareemknowscode.github.io/ca-economy-outages/). Our findings are presented in this report, which was completed as part of the DSC80 course at UCSD
+This is a data science project that aims to utilize machine learning models for predicting the severity of power outages. Our previous exploratory data analysis on this dataset can be found [here](https://kareemknowscode.github.io/ca-economy-outages/). Our findings are presented in this report, which was completed as part of the DSC 80 course at UCSD
 
 ## Introduction and Framing the Problem
 Anticipating and mitigating power outages is key to ensuring the stability of public welfare and infrastructure. We aim to use data regarding power outages around the United States to predict the severity of future outage events and enable proactive measures for citizens who may be impacted. 
@@ -30,8 +30,11 @@ As stated previously, we are using a random forest regression model to make our 
 | `'ANOMALY.LEVEL'`         | Oceanic Niño Index. Scores of +0.5 and higher indicate El Niño. Scores of -0.5 and lower indicate La Niña.|
 
 In total, we have 15 features for our baseline model which will be useful in generating accurate predictions regarding power outage severity. `'U.S._STATE'`, `'NERC.REGION'`, `'CLIMATE.REGION'`, `'CLIMATE.CATEGORY'`,  `'CAUSE.CATEGORY'`, and `'CAUSE.CATEGORY.DETAIL'` are our nominal features, which we will be one hot encoding for our model. `'YEAR'` and `'MONTH'` are technically ordinal features, but to predict severity, we will treat them as nominal rather than ordinal since there is no reasonable trend to follow in terms of going year by year. 
+
 Our quantitative features include `'PC.REALGSP.STATE'`, `'CUSTOMERS.PROPORTION'`, `'TOTAL.CUSTOMERS'`, `'ANOMALY.LEVEL'`, `'OUTAGE.DURATION'`. We will be standardizing these features to gauge variation among the data and judge just how severe any given outage event is relative to the average severity of outages from our data.
+
 `'CUSTOMERS.PROPORTION'` is not a feature included in the original dataset. We created it by dividing the customers affected by an outage by the total customer count of the US state. This is going to be our response variable, which will greatly help in quantifying the severity of a power outage in terms of how widespread it might be. We expect that larger outages will increase the proportion of customers that experience outages, which we believe justifies our use of this proportion as our response variable. 
+
 Our data cleaning process was nearly the same as we had performed previously in our analysis of the effects of outages on California’s GSP, except that now we will include all 50 states and the NERC regions that they are associated with. We also include US climate regions as well. In terms of missing data, we mostly dealt with these issues by dropping the rows that did not contain data given that it was not possible to impute that data, such as a missing outage restoration date or a missing cause category. For the rows with missing data we did not up and drop, we were able to determine the correct values that we then imputed. For example, the state of Hawaii did not originally have any values in the `'CLIMATE.REGION'` column, and we imputed its region as the Pacific Islands region. We were able to impute some values in `'CAUSE.CATEGORY.DETAIL'` by duplicating self-explanatory values from the `'CAUSE.CATEGORY'` column such as “islanding”, which describes the exact issue that caused the outage to occur. 
 Using this data, we separated our model into training and testing sets and ran the model. We used an 80-20 split and a max depth of 5 for our random forest regressor and from this, we got the following metrics on average (rounded to the nearest hundredth):
 
