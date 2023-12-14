@@ -16,13 +16,13 @@ As stated previously, we are using a random forest regression model to make our 
 
 ### Features
 |*Variables*				|*Description*|
-| --- 						|---|
+| --- 						  |---|
 |`'YEAR'` 					|Year that the outage occurred|
 |`'MONTH'`					|Month that the outage occurred|
 |`'U.S._STATE'`			|State that the outage occurred|
 |`'NERC.REGION'` 		|Categorical data describing the climate at the time of the outage|
 |`'CLIMATE.REGION'`  	|NCE Climate Regions for a given U.S. state|
-|`'CLIMATE.CATEGORY'`|Climate episode for a given U.S. state|
+|`'CLIMATE.CATEGORY'` |Climate episode for a given U.S. state|
 |`'CAUSE.CATEGORY'` 		|Categorical data describing the cause of the outage. E.g. “severe weather”|
 |`'CAUSE.CATEGORY.DETAIL'` 	|Details as to the cause of the outage. E.g. “heavy wind”|
 |`'PC.REALGSP.STATE'` 		|Per capita real GSP of a given state (adj. for inflation, 2009 chained $USD)|
